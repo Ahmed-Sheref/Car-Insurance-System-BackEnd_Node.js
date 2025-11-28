@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "luxon": "^3.7.2",
+    "msnodesqlv8": "^5.1.1",
+    "multer": "^2.0.2",
+    "puppeteer": "^24.19.0"
+  },
+  "name": "myproject",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "This my First Project to back_end",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ahmed Sheref",
+  "license": "ISC"
+}

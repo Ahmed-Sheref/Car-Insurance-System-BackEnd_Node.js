@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Payment</title>
+  <style>
+    body { background:#0b1622; color:#e6edf3; font-family:system-ui, Segoe UI, Roboto, Arial, sans-serif; }
+    .card { max-width:680px; margin:40px auto; background:#121c29; border:1px solid #1e2a3a; border-radius:12px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.25); }
+    h1 { margin:0 0 6px; }
+    .sub { color:#9fb0c3; margin-bottom:18px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:14px 18px; }
+    label { font-size:12px; color:#b7c4d6; display:block; margin-bottom:6px; }
+    input, select, textarea { width:100%; padding:10px 12px; background:#0e1723; border:1px solid #223144; color:#e6edf3; border-radius:8px; }
+    textarea { min-height:90px; resize:vertical; }
+    .btns { display:flex; gap:10px; margin-top:16px; }
+    button { padding:10px 14px; border-radius:10px; border:0; cursor:pointer; }
+    .primary { background:#2f7df4; color:white; }
+    .ghost { background:#162233; color:#cfe1ff; border:1px solid #284062; }
+    .status { margin-top:10px; color:#9fb0c3; min-height:22px; white-space:pre-wrap; }
+    a { color:#7ab3ff; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Add Payment</h1>
+    <div class="sub">Sends to <strong>http://127.0.0.1:8000/api/payment</strong></div>
+
+    <form id="paymentForm">
+      <div class="grid">
+        <div>
+          <label for="policy_id">Policy ID</label>
+          <input id="policy_id" name="policy_id" placeholder="e.g., 1024" required />
+        </div>
+        <div>
+          <label for="amount">Amount</label>
+          <input id="amount" name="amount" type="number" step="0.01" placeholder="e.g., 4000.00" required />
+        </div>
+
+        <div>
+          <label for="payment_date">Payment date</label>
+          <input id="payment_date" name="payment_date" type="date" required />
+        </div>
+        <div>
+          <label for="method">Method</label>
+          <select id="method" name="method" required>
+            <option value="">Select…</option>
+            <option>Cash</option>
+            <option>Card</option>
+            <option>Bank Transfer</option>
+          </select>
+        </div>
+
+        <div style="grid-column:1 / -1">
+          <label for="notes">Notes (optional)</label>
+          <textarea id="notes" name="notes" placeholder="Reference, partial payment, etc."></textarea>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button type="submit" class="primary">Save payment</button>
+        <button type="button" id="prefill" class="ghost">Prefill example</button>
+        <a href="./index.html" class="ghost" style="padding:10px 14px; border-radius:10px; border:1px solid #284062;">← Back to policy</a>
+      </div>
+      <div id="status" class="status"></div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('paymentForm');
+    const statusEl = document.getElementById('status');
+
+    // AJAX submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusEl.textContent = 'Saving…';
+
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      // basic front validation
+      if (!data.policy_id || !data.amount || !data.payment_date || !data.method) {
+        statusEl.textContent = 'Please fill required fields.';
+        return;
+      }
+
+      try {
+        const resp = await fetch('http://127.0.0.1:8000/api/payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const text = await resp.text(); // server may send text or json
+        if (!resp.ok) throw new Error(`HTTP ${resp.status} - ${text}`);
+
+        statusEl.textContent = `✅ Saved.\n\nServer says:\n${text}`;
+        // form.reset(); // optional
+      } catch (err) {
+        statusEl.textContent = '❌ Failed: ' + err.message;
+        console.error(err);
+      }
+    });
+
+    // Prefill
+    document.getElementById('prefill').addEventListener('click', () => {
+      const set = (id,v)=>document.getElementById(id).value=v;
+      set('policy_id','1024');
+      set('amount','4000.00');
+      set('payment_date','2025-01-05');
+      document.getElementById('method').value = 'Card';
+      document.getElementById('notes').value = 'First installment';
+      statusEl.textContent = 'Example data filled.';
+    });
+  </script>
+</body>
+</html>

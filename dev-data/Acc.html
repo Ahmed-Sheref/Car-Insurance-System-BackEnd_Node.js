@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accident Report</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+</head>
+<body>
+
+  <div w3-include-html="include/header.html"></div>
+
+  <div class="card" style="max-width: 800px;">
+    <h1>Accident Report Form</h1>
+    <form id="accidentForm" enctype="multipart/form-data">
+      <label for="acc_description">Accident Description:</label>
+      <textarea name="acc_description" required placeholder="Describe the accident..."></textarea>
+
+      <label for="location">Location:</label>
+      <input type="text" name="location" required placeholder="Enter location">
+
+      <label for="accident_date">Accident Date:</label>
+      <input type="date" name="accident_date" required>
+
+      <label for="car_id">Car ID:</label>
+      <input type="number" name="car_id" required>
+
+      <label for="customer_id">Customer ID:</label>
+      <input type="number" name="customer_id" required>
+
+      <div class="file-upload">
+        <label for="acc_image">Upload Image:</label>
+        <input type="file" name="acc_image" accept="image/*">
+      </div>
+
+      <div class="btns">
+        <button type="submit" class="primary">Submit Report</button>
+        <a href="Policy.html" class="ghost">Back to Policy</a>
+      </div>
+      <div id="status" class="status"></div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('accidentForm');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = 'Submitting...';
+      status.className = 'status';
+
+      const formData = new FormData(form);
+
+      const res = await apiFetch('/accident', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!res) return;
+
+      const text = await res.text();
+      if (res.ok) {
+        status.textContent = 'Report submitted!';
+        status.className = 'status success';
+        form.reset();
+      } else {
+        status.circleContent = 'Error: ' + text;
+        status.className = 'status error';
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/w3-include-html@1.0.0/w3-include-html.min.js"></script>
+  <script>w3IncludeHTML();</script>
+</body>
+</html>

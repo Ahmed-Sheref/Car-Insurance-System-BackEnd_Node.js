@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - SafeDrive Insurance</title>
+  <link rel="stylesheet" href="/MyProject/dev-data/css/style.css" />
+</head>
+<body>
+  <div class="card" style="max-width: 420px;">
+    <h1>Login</h1>
+    <form id="loginForm">
+      <div style="margin-bottom: 16px;">
+        <label for="username">Username</label>
+        <input type="text" id="username" required />
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label for="password">Password</label>
+        <input type="password" id="password" required />
+      </div>
+      <button type="submit" class="primary" style="width:100%;">Login</button>
+    </form>
+    <div id="status" class="status"></div>
+  </div>
+
+  <script src="/MyProject/dev-data/js/auth.js"></script>
+</body>
+</html>
