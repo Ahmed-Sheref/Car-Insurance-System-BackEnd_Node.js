@@ -1,5 +1,11 @@
-MyProject\test.js
-MyProject\package.json
-MyProject\package-lock.json
-MyProject\data.env
-MyProject\Token.txt
+# Node modules
+node_modules/
+
+# Env & secrets
+data.env
+Token.txt
+
+test.js
+
+dev-data/
+images/
