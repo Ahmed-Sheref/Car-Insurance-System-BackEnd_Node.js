@@ -5,7 +5,7 @@ import sql from 'msnodesqlv8';
 const connStr =
     'server=.;' + 
     'Database=Project2026;' +
-    'Trusted_Connection=Yes;' +          // <— no user/pass needed
+    'Trusted_Connection=Yes;' +
     'Driver={ODBC Driver 17 for SQL Server}';
 
 export async function Check_car_id (req , res , next)

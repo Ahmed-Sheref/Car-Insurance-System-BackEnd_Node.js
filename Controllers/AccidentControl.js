@@ -6,7 +6,7 @@ import path from 'path'
 const connStr =
     'server=.;' + 
     'Database=Project2026;' +
-    'Trusted_Connection=Yes;' +          // <— no user/pass needed
+    'Trusted_Connection=Yes;' +
     'Driver={ODBC Driver 17 for SQL Server}';
 
 console.log(connStr)

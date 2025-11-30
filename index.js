@@ -7,7 +7,6 @@ import { upload } from './middlewares/multermiddlware.js';
 import * as accidentroute from './Routes/AccidentRoute.js';
 import { Check_car_id } from './middlewares/Check_car_id.js';
 import { LoginToSystem } from './Controllers/LoginControl.js';
-// SaveAndCreatePDF
 
 
 export const app = express();
@@ -27,7 +26,3 @@ app.post('/api/v1/login', LoginToSystem);
 // app.use('/api/v1/login' , LoginRoute.router);
 app.use('/api/v1/policy' , PolicyRoute.router);
 app.use('/api/v1/accident' , upload.single('acc_image') , Check_car_id , accidentroute.router);
-
-
-
-// 404 (Express fallback)
