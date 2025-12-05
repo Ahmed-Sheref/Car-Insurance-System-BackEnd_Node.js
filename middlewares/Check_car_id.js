@@ -29,8 +29,7 @@ export async function Check_car_id (req , res , next)
             }
         });
     })
-    if (result && result[0].Column0 > 0)
-        next()
+    if (result && result[0].Column0 > 0) next()
     else
     {
         res.status(400).json({data:'undefined'})

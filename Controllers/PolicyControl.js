@@ -10,14 +10,16 @@ export async function SaveAndCreatePDF(req, res)
         let data = Handle_body(body);
         if (!Policy_Check.Check_premium(data.max_coverage , data.premium_total))
         {
-            return res.status(400).json({
+            return res.status(400).json(
+            {
                 status: 'fail',
                 data: { message: 'premium_total should be >= (max_coverage / 5)' }
             });
         }
         if (!(Policy_Check.Check_Date(data.start_date, data.end_date)))
         {
-            return res.status(400).json({
+            return res.status(400).json(
+            {
                 status: 'fail',
                 data: { message: 'Invalid date range: end_date must be after start_date' }
             });

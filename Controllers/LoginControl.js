@@ -1,29 +1,36 @@
 import fs from 'fs';
 import crypto from 'crypto';
+import path from 'path';
 
 // Controller for Login and Token Generation
-export async function LoginToSystem(req, res) {
-    try {
+export async function LoginToSystem(req, res) 
+{
+    try 
+    {
         console.log(req.url);
         let auth = req.headers['authorization'];
 
         if (!auth) {
-            return res.status(401).json({
+            return res.status(401).json(
+            {
                 status: 'fail',
-                data: { message: 'Missing Authorization header' }
+                data: { message: 'Missing Authorization header'}
             });
         }
 
         // Basic Authentication (create token)
-        if (auth.startsWith('Basic ')) {
+        if (auth.startsWith('Basic ')) 
+        {
             auth = auth.replace('Basic ', '');
             let str = Buffer.from(auth, 'base64').toString();
             const [username, password] = str.split(':');
 
-            if (username === 'ahmed' && password === '472005Medo') {
+            if (username === 'ahmed' && password === '472005Medo') 
+            {
                 const token = await generate_token();
                 console.log(token)
-                return res.status(200).json({
+                return res.status(200).json(
+                {
                     status: 'success',
                     data: {
                         token,
@@ -31,8 +38,11 @@ export async function LoginToSystem(req, res) {
                         expires_in: 100000
                     }
                 });
-            } else {
-                return res.status(401).json({
+            } 
+            else 
+            {
+                return res.status(401).json(
+                {
                     status: 'fail',
                     data: { message: 'Invalid username or password' }
                 });
@@ -40,14 +50,18 @@ export async function LoginToSystem(req, res) {
         }
 
         // If Authorization header is neither Basic nor Bearer, return error
-        return res.status(400).json({
+        return res.status(400).json(
+        {
             status: 'fail',
             data: { message: 'Invalid Authorization type' }
         });
 
-    } catch (err) {
+    } 
+    catch (err) 
+    {
         console.error(err);
-        return res.status(500).json({
+        return res.status(500).json(
+        {
             status: 'error',
             data: { message: 'Internal Server Error', error: err.message }
         });
@@ -56,9 +70,10 @@ export async function LoginToSystem(req, res) {
 
 // Function to generate token
 // "D:\Programming\Back_end\MyProject\Token.txt"
-async function generate_token() {
+async function generate_token() 
+{
     const token = crypto.randomBytes(16).toString('hex');
-    await fs.promises.writeFile('D:\\Programming\\Back_end\\MyProject\\Token.txt', token + '\n', 'utf-8');
+    await fs.promises.writeFile(`${path.join(import.meta.dirname , '..' , 'Token.txt')/*./MyProject/Token.txt*/}`, token + '\n', 'utf-8');
     setTimeout(async () => 
         {
             try 
@@ -74,6 +89,7 @@ async function generate_token() {
 }
 
 // Function to reset token
-async function resetToken() {
-    await fs.promises.writeFile('D:\\Programming\\Back_end\\MyProject\\Token.txt', '', 'utf8');
+async function resetToken() 
+{
+    await fs.promises.writeFile(`${path.join(import.meta.dirname , '..' , 'Token.txt')/*./MyProject/Token.txt*/}`, '', 'utf8');
 }
