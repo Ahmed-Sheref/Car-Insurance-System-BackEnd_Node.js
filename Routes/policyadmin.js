@@ -7,9 +7,10 @@ import { protect, restrictto } from '../Controllers/auth.js';
 export const router = express.Router();
 
 router.route('/policy-requests')
-    .get(protect, policy.get_policy_request)
-    .post(protect, policy.policy_request)
+    .get(protect, policy.get_policy_request_admin)
 
 router.route('/policy-requests/:req_id')
     .get(protect, policy.get_policy_request_by_id)
+    .patch(protect, policy.approve_policy_request)
 
+// part of admin
