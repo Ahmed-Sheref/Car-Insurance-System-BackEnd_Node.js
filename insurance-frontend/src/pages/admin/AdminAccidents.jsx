@@ -13,7 +13,7 @@ export default function AdminAccidents() {
 
   useEffect(() => {
     adminApi
-      .get("/admin/accidents")
+      .get("/accidents")
       .then((res) => setList(res.data?.accidents ?? res.data ?? []))
       .catch((err) => setError(err?.response?.data?.message || "Failed to load accidents"))
       .finally(() => setLoading(false));

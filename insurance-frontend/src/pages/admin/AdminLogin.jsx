@@ -19,7 +19,7 @@ export default function AdminLogin() {
         email,
         password,
       });
-      setAdminToken(res.data.data.token);
+      setAdminToken(res.data.token);
       nav("/admin");
     } catch (e2) {
       setErr(e2?.response?.data?.message || e2?.response?.data?.data?.message || "Admin login failed");

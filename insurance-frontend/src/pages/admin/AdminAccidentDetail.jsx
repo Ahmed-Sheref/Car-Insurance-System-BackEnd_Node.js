@@ -19,7 +19,7 @@ export default function AdminAccidentDetail() {
   useEffect(() => {
     if (!id) return;
     Promise.all([
-      adminApi.get(`/admin/accidents/${id}`).then((r) => r.data?.accident ?? r.data),
+      adminApi.get(`/accidents/${id}`).then((r) => r.data?.accident ?? r.data),
       adminApi.get(`/accidents/${id}/images`).then((r) => r.data?.images ?? r.data ?? []).catch(() => []),
     ])
       .then(([acc, imgs]) => {
@@ -35,9 +35,9 @@ export default function AdminAccidentDetail() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitLoading(true);
-    const payload = { claim_status, approved_amount: claim_status === "Approved" && approved_amount ? Number(approved_amount) : undefined };
+    const payload = { claim_status, approved_amount: claim_status === "Approved" ? approved_amount : undefined };
     adminApi
-      .patch(`/admin/accidents/${id}`, payload)
+      .put(`/accidents/${id}`, payload)
       .then(() => {
         showToast("Claim updated", "success");
         setAccident((prev) => (prev ? { ...prev, ...payload } : null));

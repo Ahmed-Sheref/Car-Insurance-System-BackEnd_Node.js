@@ -21,7 +21,7 @@ export default function AdminPayments() {
   const load = () => {
     setLoading(true);
     adminApi
-      .get("/admin/payments")
+      .get("/payments")
       .then((res) => setList(res.data?.payments ?? res.data ?? []))
       .catch((err) => setError(err?.response?.data?.message || "Failed to load payments"))
       .finally(() => setLoading(false));
@@ -33,7 +33,7 @@ export default function AdminPayments() {
     e.preventDefault();
     setSubmitLoading(true);
     adminApi
-      .post("/admin/payments", { policy_id: Number(policy_id), amount: Number(amount), payment_date, method })
+      .post("/payments", { policy_id: Number(policy_id), amount: Number(amount), payment_date, method })
       .then(() => {
         showToast("Payment created", "success");
         setModalOpen(false);

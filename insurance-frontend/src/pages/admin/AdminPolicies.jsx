@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { adminApi } from "../../api/client";
 import Table from "../../components/Table";
 import Modal from "../../components/Modal";
 import FormInput from "../../components/FormInput";
 import Select from "../../components/Select";
 import { useToast } from "../../components/Toast";
-
+function formatDate(val) {
+  if (val == null) return "—";
+  const d = typeof val === "string" ? new Date(val) : val;
+  return isNaN(d.getTime()) ? String(val) : d.toLocaleDateString();
+}
 const STATUS_OPTIONS = [
   { value: "Active", label: "Active" },
   { value: "Expired", label: "Expired" },
@@ -15,7 +18,6 @@ const STATUS_OPTIONS = [
 ];
 
 export default function AdminPolicies() {
-  const navigate = useNavigate();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -35,13 +37,19 @@ export default function AdminPolicies() {
   const load = () => {
     setLoading(true);
     adminApi
-      .get("/admin/policies")
+      .get("/policies")
       .then((res) => setList(res.data?.policies ?? res.data ?? []))
       .catch((err) => setError(err?.response?.data?.message || "Failed to load policies"))
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  useEffect(() => {
+    setLoading(true);
+    load();
+    return () => {
+      setLoading(false);
+    };
+  }, []);
 
   const filtered = filterStatus ? list.filter((p) => (p.status || "").toLowerCase() === filterStatus.toLowerCase()) : list;
 
@@ -72,7 +80,7 @@ export default function AdminPolicies() {
     e.preventDefault();
     setSubmitLoading(true);
     const payload = { car_id: car_id ? Number(car_id) : undefined, coverage_type, start_date, end_date, premium: premium ? Number(premium) : undefined, max_coverage: max_coverage ? Number(max_coverage) : undefined, status };
-    const req = editId ? adminApi.patch(`/admin/policies/${editId}`, payload) : adminApi.post("/admin/policies", payload);
+    const req = editId ? adminApi.put(`/policies/${editId}`, payload) : adminApi.post("/policies", payload);
     req
       .then(() => {
         showToast(editId ? "Policy updated" : "Policy created", "success");
@@ -88,10 +96,10 @@ export default function AdminPolicies() {
     { key: "car_id", label: "Car ID" },
     { key: "status", label: "Status" },
     { key: "coverage_type", label: "Coverage" },
-    { key: "start_date", label: "Start" },
-    { key: "end_date", label: "End" },
-    { key: "premium", label: "Premium" },
-    { key: "max_coverage", label: "Max Coverage" },
+    { key: "start_date", label: "Start", render: (val) => formatDate(val) ?? "—" },
+    { key: "end_date", label: "End", render: (val) => formatDate(val) ?? "—" },
+    { key: "premium", label: "Premium", render: (val) => Number(val).toFixed(2) ?? "—" },
+    { key: "max_coverage", label: "Max Coverage", render: (val) => Number(val).toFixed(2) ?? "—" },
     {
       key: "actions",
       label: "Actions",

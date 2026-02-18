@@ -16,8 +16,8 @@ export default function AdminLogin() {
     setError("");
     setLoading(true);
     try {
-      const res = await api.post("/auth/employee/login", { email, password });
-      const token = res.data?.token;
+      const res = await api.post("/auth/admin/login", { email, password });
+      const token = res.data?.data?.token;
       if (token) {
         setAdminToken(token);
         nav("/admin");

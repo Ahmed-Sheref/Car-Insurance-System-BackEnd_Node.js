@@ -14,6 +14,7 @@ export const router = express.Router();
 
 router.post('/signUp' , auth.signUp)
 router.post('/logIn' , auth.logIn)
+router.post('/admin/login' , auth.adminLogin)
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));    //google login route
 
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';

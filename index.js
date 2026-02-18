@@ -10,10 +10,12 @@ import passport from './utils/passport.js';
 import * as PolicyRoute from './Routes/PolicyRoute.js';
 import * as authRoute from './Routes/auth.js';
 import * as usersRoute from './Routes/users.js';
+import * as adminRoute from './Routes/admin.js';
 
 import { swaggerSpec } from "./swagger.js";
 import {protect} from './Controllers/auth.js';
 import * as policyadmin from './Routes/policyadmin.js';
+import { restrictto } from './Controllers/auth.js';
 export const app = express();
 
 // --- MIDDLEWARES ORDER ---
@@ -33,8 +35,7 @@ app.use('/api/v1/auth', authRoute.router);
 app.use('/api/v1/customer', protect, restrictto('Regular', 'individual' , 'admin'), usersRoute.router);
 app.use('/api/v1/policy', protect,  restrictto('Regular', 'individual' , 'admin'),PolicyRoute.router);
 app.use('/api/v1/policy/admin', protect, restrictto('admin'), policyadmin.router);
-
-
+app.use('/api/v1/admin', adminRoute.router);
 
 // app.use('/api/v1/accident', upload.single('acc_image'), Check_car_id, accidentroute.router);d
 

@@ -9,10 +9,10 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     Promise.all([
-      adminApi.get("/admin/customers").then((r) => r.data?.customers ?? r.data ?? []).catch(() => []),
-      adminApi.get("/admin/policies").then((r) => r.data?.policies ?? r.data ?? []).catch(() => []),
-      adminApi.get("/admin/accidents").then((r) => r.data?.accidents ?? r.data ?? []).catch(() => []),
-      adminApi.get("/admin/payments").then((r) => r.data?.payments ?? r.data ?? []).catch(() => []),
+      adminApi.get("/customers").then((r) => r.data?.data?.customers ?? r.data?.customers ?? []).catch(() => []),
+      adminApi.get("/policies").then((r) => r.data?.data?.policies ?? r.data?.policies ?? []).catch(() => []),
+      adminApi.get("/accidents").then((r) => r.data?.data?.accidents ?? r.data?.accidents ?? []).catch(() => []),
+      adminApi.get("/payments").then((r) => r.data?.data?.payments ?? r.data?.payments ?? []).catch(() => []),
     ])
       .then(([customers, policies, accidents, payments]) => {
         setCounts({

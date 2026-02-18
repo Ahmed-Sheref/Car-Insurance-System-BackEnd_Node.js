@@ -11,7 +11,7 @@ export default function CustomerDetail() {
   useEffect(() => {
     if (!id) return;
     adminApi
-      .get(`/admin/customers/${id}`)
+      .get(`/customers/${id}`)
       .then((res) => setCustomer(res.data?.customer ?? res.data))
       .catch((err) => setError(err?.response?.data?.message || "Failed to load customer"))
       .finally(() => setLoading(false));

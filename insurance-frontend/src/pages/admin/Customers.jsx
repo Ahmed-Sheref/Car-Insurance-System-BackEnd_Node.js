@@ -13,8 +13,8 @@ export default function Customers() {
 
   useEffect(() => {
     adminApi
-      .get("/admin/customers")
-      .then((res) => setList(res.data?.customers ?? res.data ?? []))
+      .get("/customers")
+      .then((res) => setList(res.data?.data?.customers ?? res.data?.customers ?? []))
       .catch((err) => setError(err?.response?.data?.message || "Failed to load customers"))
       .finally(() => setLoading(false));
   }, []);

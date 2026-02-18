@@ -195,6 +195,7 @@ export async function protect(req , res , next)
         const decoded = JWT.verify(token, process.env.JWT_SECRET);
 
         req.customer_id = decoded.customer_id;
+        req.customer_type = decoded.customer_type;
         //2) Check if user still exists
         const pool = await poolPromise;
         const result = await pool.request().input('customer_id' , sql.Int, decoded.customer_id).query(`select count(*) as [count] from Customer where customer_id = @customer_id`);
@@ -241,5 +242,63 @@ export function restrictto(...role)
             });
         }
         next();
+    }
+}
+
+export async function adminLogin(req, res, next) {
+    const {email, password} = req.body;
+
+    try {
+        const pool = await poolPromise;
+
+        // Check if user exists and is admin
+        const result = await pool.request()
+            .input('userEmail', sql.VarChar, email)
+            .query(`
+                SELECT COUNT(*) as [count], c.customer_id, c.customer_type 
+                FROM Customer c 
+                WHERE c.email = @userEmail AND c.customer_type = 'admin'
+                GROUP BY c.customer_id, c.customer_type
+            `);
+
+        if (!result.recordset || result.recordset.length === 0) {
+            return res.status(401).json({ status: 'error', message: 'Admin user not found' });
+        }
+
+        let count = result.recordset[0].count;
+        let customer_id = result.recordset[0].customer_id;
+        let customer_type = result.recordset[0].customer_type;
+        
+        if (count === 0) {
+            throw new Error('Admin user not found');
+        }
+
+        // Verify password
+        const user = await pool.request()
+            .input('customer_id', sql.Int, customer_id)
+            .query(`SELECT * FROM Users WHERE Customer_id = @customer_id`);    
+        
+        let password_hash = user.recordset[0].password_hash;
+
+        const isPasswordValid = await bcrypt.compare(password, password_hash);
+
+        if (!isPasswordValid) {
+            throw new Error('Invalid password');
+        }
+
+        const token = g_token(customer_id, customer_type);
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                customer_id,
+                email,
+                customer_type,
+                token
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(401).json({ status: 'error', message: err.message });
     }
 }
