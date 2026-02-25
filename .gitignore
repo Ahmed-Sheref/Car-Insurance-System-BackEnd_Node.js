@@ -19,9 +19,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+node_modules/
+dist/
+dist-ssr/
 *.local
 
 # Editor directories and files
@@ -41,3 +41,8 @@ data.env
 .env
 .env.*
 Token.txt
+
+insurance-frontend/node_modules/
+insurance-frontend/dist/
+insurance-frontend/.env
+insurance-frontend/.env.*
