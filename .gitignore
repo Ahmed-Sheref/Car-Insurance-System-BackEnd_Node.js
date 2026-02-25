@@ -36,6 +36,8 @@ dist-ssr
 *.sw?
 
 client_secret_*.json
-*.env
+_secrets_backup/
 data.env
+.env
+.env.*
 Token.txt
