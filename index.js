@@ -32,8 +32,8 @@ app.use((req, res , next) => { console.log(req.url); next(); });
 
 // --- ROUTES ---
 app.use('/api/v1/auth', authRoute.router);
-app.use('/api/v1/customer', protect, restrictto('Regular', 'individual' , 'admin'), usersRoute.router);
-app.use('/api/v1/policy', protect,  restrictto('Regular', 'individual' , 'admin'),PolicyRoute.router);
+app.use('/api/v1/customer', protect, restrictto('Regular', 'Individual' , 'admin'), usersRoute.router);
+app.use('/api/v1/policy', protect,  restrictto('Regular', 'Individual' , 'admin'),PolicyRoute.router);
 app.use('/api/v1/policy/admin', protect, restrictto('admin'), policyadmin.router);
 app.use('/api/v1/admin', adminRoute.router);
 

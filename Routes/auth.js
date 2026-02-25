@@ -33,7 +33,7 @@ router.get('/google/callback',
         // 3. Issue Internal JWT: 
         // protect() looks up by customer_id in the Customer table, so we must pass Customer_id (from Users row), not user_id
         const customerId = req.user.Customer_id ?? req.user.customer_id;
-        const customerType = req.user.customer_type;
+        const customerType = req.user.customer_type || 'Regular';
         const token = g_token(customerId, customerType);
 
         // 4. Secure Storage: 

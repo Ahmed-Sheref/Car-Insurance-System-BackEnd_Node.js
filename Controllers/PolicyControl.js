@@ -1,5 +1,6 @@
 import { poolPromise } from '../Models/db.js';
 import sql from 'mssql';
+import { sendEmail } from '../utils/email.js';
 
 export async function policy_request(req , res , next) 
 {
@@ -273,6 +274,20 @@ export async function approve_policy_request(req, res, next)
             return res.status(409).json({ message: `Cannot review. Current status is ${pr.status}` });
         }
 
+        const userData = await new sql.Request(tx)
+            .input("car_id", sql.Int, pr.car_id)
+            .query(`
+                SELECT 
+                cust.email,
+                cust.first_name
+                FROM dbo.Car c
+                JOIN dbo.Customer cust ON c.customer_id = cust.customer_id
+                WHERE c.car_id = @car_id
+            `);
+
+            const customerEmail = userData.recordset[0].email;
+            const customerFirstName = userData.recordset[0].first_name;
+
         if (normalizedStatus === "approved") 
         {
             
@@ -312,7 +327,25 @@ export async function approve_policy_request(req, res, next)
                     WHERE request_id = @request_id;
                 `);
 
+            // هتجيبهم ب Query بسيطة
             await tx.commit();
+            try 
+            {
+                await sendEmail(
+                {
+                    email: customerEmail,
+                    subject: "Your insurance request has been approved",
+                    template: "policyRequestApproved",
+                    user: {
+                        name: customerFirstName
+                    },
+                    url: `policy/${policy_id}`
+                });
+            } 
+            catch (emailErr) 
+            {
+                console.error("Email failed:", emailErr.message);
+            }
             return res.json({ 
                 status: "success", 
                 message: "Policy approved and created successfully",
@@ -333,7 +366,23 @@ export async function approve_policy_request(req, res, next)
                         approved_at = SYSUTCDATETIME()
                     WHERE request_id = @request_id;
                 `);
-
+            try 
+            {
+                await sendEmail(
+                {
+                    email: customerEmail,
+                    subject: "Your insurance request has been rejected",
+                    template: "policyRequestRejected",
+                    user: {
+                        name: customerFirstName
+                    },
+                    url: '#'
+                });
+            } 
+            catch (emailErr) 
+            {
+                console.error("Email failed:", emailErr.message);
+            }
             await tx.commit();
             return res.json({ 
                 status: "success", 

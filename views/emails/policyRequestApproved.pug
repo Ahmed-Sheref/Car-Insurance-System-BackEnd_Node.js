@@ -1,0 +1,182 @@
+doctype html
+html
+  head
+    meta(name='viewport', content='width=device-width')
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    title= subject
+    style.
+      body {
+        background-color: #f6f9fc;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        width: 100%;
+        padding: 24px 12px;
+      }
+      .card {
+        max-width: 640px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+        border: 1px solid #eef2f6;
+      }
+      .header {
+        padding: 26px 28px;
+        background: linear-gradient(135deg, #0ea5e9, #22c55e);
+        color: #fff;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.2px;
+      }
+      .header p {
+        margin: 8px 0 0;
+        opacity: 0.95;
+      }
+      .content {
+        padding: 26px 28px 18px;
+        color: #1f2937;
+      }
+      .content p {
+        margin: 0 0 14px;
+        color: #374151;
+      }
+      .badge {
+        display: inline-block;
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .details {
+        margin-top: 16px;
+        border: 1px solid #eef2f6;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .row {
+        display: table;
+        width: 100%;
+        border-top: 1px solid #eef2f6;
+      }
+      .row:first-child { border-top: 0; }
+      .cell {
+        display: table-cell;
+        padding: 12px 14px;
+        vertical-align: top;
+        font-size: 14px;
+      }
+      .cell.key {
+        width: 38%;
+        color: #6b7280;
+        background: #fafbfc;
+        font-weight: 600;
+      }
+      .cell.val {
+        color: #111827;
+        font-weight: 700;
+      }
+      .cta {
+        text-align: center;
+        padding: 18px 28px 26px;
+      }
+      .btn {
+        display: inline-block;
+        background: #111827;
+        color: #ffffff !important;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-weight: 800;
+        font-size: 14px;
+      }
+      .btn:hover {
+        opacity: 0.92;
+      }
+      .muted {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 10px;
+      }
+      .footer {
+        padding: 16px 20px;
+        text-align: center;
+        background: #f9fafb;
+        color: #6b7280;
+        font-size: 12px;
+        border-top: 1px solid #eef2f6;
+      }
+      @media only screen and (max-width: 620px) {
+        .content, .header, .cta { padding-left: 18px !important; padding-right: 18px !important; }
+        .cell { display: block; width: 100% !important; }
+        .cell.key { border-bottom: 1px solid #eef2f6; }
+      }
+
+  body
+    .container
+      .card
+        .header
+          h1 Your Insurance Request is Approved ✅
+          p #{firstName}, your request has been reviewed and approved.
+
+        .content
+          span.badge Status: Approved
+
+          p(style="margin-top: 14px") Below are the details of your approved request.
+
+          .details
+            .row
+              .cell.key Request ID
+              .cell.val #{requestId}
+            if policyId
+              .row
+                .cell.key Policy ID
+                .cell.val #{policyId}
+            if car
+              .row
+                .cell.key Vehicle
+                .cell.val #{car}
+            if startDate
+              .row
+                .cell.key Coverage Start
+                .cell.val #{startDate}
+            if endDate
+              .row
+                .cell.key Coverage End
+                .cell.val #{endDate}
+            if approvedPremium
+              .row
+                .cell.key Approved Premium
+                .cell.val #{approvedPremium}
+            if maxCoverage
+              .row
+                .cell.key Max Coverage
+                .cell.val #{maxCoverage}
+
+          if notes
+            p(style="margin-top: 16px; color:#374151")
+              b Notes:
+              |  #{notes}
+
+        .cta
+          if url
+            a.btn(href=`${url}` target="_blank") View your policy
+            p.muted If the button doesn't work, copy and paste this link:
+            p.muted(style="word-break:break-all") #{url}
+          else
+            p.muted You can open the app to view your policy details.
+
+        .footer
+          | © 2026 Baddel Insurance System — All rights reserved.
