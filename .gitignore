@@ -1,11 +1,41 @@
-# Node modules
-node_modules/
+# # Node modules
+# node_modules/
 
-# Env & secrets
+# # Env & secrets
+# data.env
+# Token.txt
+
+# test.js
+
+# dev-data/
+# images/
+
+
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+client_secret_*.json
+*.env
 data.env
 Token.txt
-
-test.js
-
-dev-data/
-images/
