@@ -15,7 +15,9 @@
     "passport-google-oauth20": "^2.0.0",
     "pug": "^3.0.3",
     "puppeteer": "^24.37.5",
-    "react-router-dom": "^7.13.0"
+    "react-router-dom": "^7.13.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "name": "myproject",
   "version": "1.0.0",

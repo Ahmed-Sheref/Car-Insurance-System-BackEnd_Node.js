@@ -12,7 +12,7 @@ import * as authRoute from './Routes/auth.js';
 import * as usersRoute from './Routes/users.js';
 import * as adminRoute from './Routes/admin.js';
 
-import { swaggerSpec } from "./swagger.js";
+import { swaggerSpec } from "./swagger-config.js";
 import {protect} from './Controllers/auth.js';
 import * as policyadmin from './Routes/policyadmin.js';
 import { restrictto } from './Controllers/auth.js';
